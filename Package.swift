@@ -25,14 +25,37 @@
 
 import PackageDescription
 
-let package = Package(name: "AFNetworking",
-                      platforms: [.macOS(.v10_10),
-                                  .iOS(.v9),
-                                  .tvOS(.v9),
-                                  .watchOS(.v2)],
-                      products: [.library(name: "AFNetworking",
-                                          targets: ["AFNetworking"])],
-                      targets: [.target(name: "AFNetworking",
-                                        path: "AFNetworking",
-                                        resources: [.copy("PrivacyInfo.xcprivacy")],
-                                        publicHeadersPath: "")])
+let package = Package(
+    name: "AFNetworking",
+    platforms: [
+        .macOS(.v10_10),
+        .iOS(.v9),
+        .tvOS(.v9),
+        .watchOS(.v2)
+    ],
+    products: [
+        // Default product includes UIKit extensions (iOS/tvOS).
+        .library(
+            name: "AFNetworking",
+            targets: ["AFNetworking", "UIKit_AFNetworking"]
+        )
+    ],
+    targets: [
+        .target(
+            name: "AFNetworking",
+            path: "AFNetworking",
+            exclude: ["PrivacyInfo.xcprivacy"],
+            resources: [.copy("PrivacyInfo.xcprivacy")],
+            publicHeadersPath: ""
+        ),
+        .target(
+            name: "UIKit_AFNetworking",
+            dependencies: ["AFNetworking"],
+            path: "UIKit+AFNetworking",
+            publicHeadersPath: "",
+            cSettings: [
+                .headerSearchPath("../AFNetworking")
+            ]
+        )
+    ]
+)
