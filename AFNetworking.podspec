@@ -19,9 +19,12 @@ Pod::Spec.new do |s|
   s.tvos.pod_target_xcconfig = { 'PRODUCT_BUNDLE_IDENTIFIER' => 'com.alamofire.AFNetworking' }
 
   s.source_files = 'AFNetworking/AFNetworking.h'
+  # Put PrivacyInfo into AFNetworking.framework root (ITMS-91061).
+  # Keep resource_bundles for static/privacy-report compatibility.
+  s.resources = ['AFNetworking/PrivacyInfo.xcprivacy']
   s.resource_bundles = {
     'AFNetworking-Privacy' => ['AFNetworking/PrivacyInfo.xcprivacy']
-  }  
+  }
 
   s.subspec 'Serialization' do |ss|
     ss.source_files = 'AFNetworking/AFURL{Request,Response}Serialization.{h,m}'
